@@ -1,0 +1,3 @@
+<template>
+  <ProjectWrapper />
+</template>

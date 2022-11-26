@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { PropType } from 'vue';
-import feather from 'feather-icons';
 
 type SidebarItem = {
   route: string;
@@ -20,10 +19,7 @@ defineProps({
   },
 });
 
-const getIcon = (icon) => {
-  if (!feather.icons[icon]) return;
-  return feather.icons[icon].toSvg();
-};
+const { getIcon } = useIcon();
 </script>
 
 <template>
