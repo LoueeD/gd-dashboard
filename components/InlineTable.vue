@@ -35,6 +35,7 @@ defineProps({
       </div>
       <div class="options"><span /><span /><span /></div>
     </div>
+    <div class="paging"></div>
   </div>
 </template>
 
@@ -42,7 +43,17 @@ defineProps({
 .inline-table {
   flex-grow: 1;
   overflow: auto;
+  .paging {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    background: #fff;
+    flex-shrink: 0;
+    height: 40px;
+    border-top: 1px solid rgba(#111, 0.1);
+  }
   .row {
+    font-size: 0.9rem;
     padding-right: 60px;
     justify-content: flex-start;
     display: flex;

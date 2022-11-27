@@ -113,9 +113,10 @@ onMounted(() => {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     flex-shrink: 0;
     color: lighten(#333, 30%);
+    justify-content: center;
     align-items: center;
     display: flex;
-    gap: 10px;
+    gap: 16px;
 
     img {
       width: 24px;
