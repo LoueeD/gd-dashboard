@@ -22,7 +22,12 @@ export const useProject = () => {
         { route: '/', icon: 'search', title: 'Awaiting Start', nested: [] },
       ],
     },
-    { route: '/', icon: 'pie-chart', title: 'Sales Overview', nested: [] },
+    {
+      route: '/dashboard',
+      icon: 'pie-chart',
+      title: 'Sales Overview',
+      nested: [],
+    },
   ]);
 
   const projects = useState('projects', () => [
