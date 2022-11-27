@@ -112,15 +112,17 @@ defineProps({
       padding: 10px;
 
       .icon {
-        margin: -10px 0;
+        margin: -6px auto -10px;
         width: 30px;
         height: 30px;
         border-radius: 100%;
         box-shadow: 0 0 0 1px rgba(#111, 0.1);
+        display: block;
       }
 
       &[data-index='0'] {
-        min-width: 50px;
+        min-width: 55px;
+        text-align: center;
       }
 
       &[data-index='1'] {
