@@ -35,6 +35,7 @@ defineProps({
   flex-grow: 1;
   overflow: auto;
   .row {
+    padding-right: 60px;
     justify-content: flex-start;
     display: flex;
 

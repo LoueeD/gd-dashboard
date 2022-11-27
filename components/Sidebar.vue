@@ -99,6 +99,7 @@ onMounted(() => {
   flex-direction: column;
   overflow: auto;
   display: flex;
+  z-index: 100;
 
   &.collapsed {
     margin-left: calc(calc(var(--width) * -1px) - 2px);
@@ -190,7 +191,7 @@ onMounted(() => {
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   transition: 350ms ease-in-out;
   background: #fff;
-  z-index: 1;
+  z-index: 100;
 
   &:not(.collapsed) {
     margin-left: -60px;
