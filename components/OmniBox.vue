@@ -17,7 +17,7 @@ const hideScreenTitle = (title: string) => {
 const allProjects = computed(() =>
   projects.value
     .map((p) => {
-      return { route: '/', icon: 'folder', title: p.name, nested: [] };
+      return { route: '/project', icon: 'folder', title: p.name, nested: [] };
     })
     .filter((p) => hideScreenTitle(p.title))
 );
