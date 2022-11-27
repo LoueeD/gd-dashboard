@@ -23,14 +23,14 @@ const links = ref([
   {
     route: '/',
     title: 'New Screen',
-    icon: 'plus',
+    icon: 'plus-square',
     hideOptions: true,
     nested: [],
   },
   {
     route: '/',
     title: 'Browse Templates',
-    icon: 'triangle',
+    icon: 'package',
     hideOptions: true,
     nested: [],
   },

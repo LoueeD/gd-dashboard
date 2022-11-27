@@ -130,8 +130,7 @@ onMounted(() => {
 .dashboard {
   position: relative;
   background: #fff;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: auto;
   flex: 1;
 
   canvas {
