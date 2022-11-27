@@ -95,7 +95,7 @@ onMounted(() => {
   ctx.value = setupCanvas(canvasRef.value);
   if (!ctx.value) return;
   ctx.value.beginPath();
-  ctx.value.strokeStyle = '#dfdfdf';
+  ctx.value.strokeStyle = '#e7e7e7';
   for (let i = -1; i < 10000; i += 20) {
     ctx.value.moveTo(0, i);
     ctx.value.lineTo(canvasRef.value.width, i);
