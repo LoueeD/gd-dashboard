@@ -8,7 +8,7 @@ type SidebarItem = {
   active?: boolean;
   nested: SidebarItem[];
 };
-defineProps({
+const props = defineProps({
   items: {
     type: Array as PropType<SidebarItem[]>,
     required: true,

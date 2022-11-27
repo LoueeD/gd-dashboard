@@ -1,19 +1,72 @@
 <script setup lang="ts">
 import { nextTick } from 'vue';
-const { projectScreens } = useProject();
+import { ProjectScreen } from '~~/models/ProjectScreen';
+
+const { projectScreens, projects } = useProject();
 const { omnibox } = useOmni();
 const { getIcon } = useIcon();
 const searchInputRef = ref<HTMLInputElement | null>(null);
+const searchTerm = ref('');
+const arrowNavIndex = ref(0);
+
+const hideScreenTitle = (title: string) => {
+  const st = searchTerm.value;
+  return title.toLowerCase().includes(st.toLowerCase());
+};
+
+const allProjects = computed(() =>
+  projects.value
+    .map((p) => {
+      return { route: '/', icon: 'folder', title: p.name, nested: [] };
+    })
+    .filter((p) => hideScreenTitle(p.title))
+);
+
+const itemsFiltered = (items: ProjectScreen[]) => {
+  const st = searchTerm.value;
+  return items.filter((item) => {
+    if (!st) return true;
+    if (item.nested && item.nested.length) {
+      item.nested = item.nested.filter((i) => hideScreenTitle(i.title));
+      return hideScreenTitle(item.title) || !!item.nested.length;
+    }
+    return hideScreenTitle(item.title);
+  });
+};
+
+const projectScreensFiltered = computed(() =>
+  itemsFiltered(JSON.parse(JSON.stringify(projectScreens.value)), 0)
+);
+
+const arrowNav = (e) => {
+  if (document.activeElement === searchInputRef.value) {
+    if (e.key === 'ArrowDown') {
+      arrowNavIndex.value += 1;
+    } else if (e.key === 'ArrowUp') {
+      arrowNavIndex.value -= 1;
+    }
+    arrowNavIndex.value = Math.max(0, arrowNavIndex.value);
+  }
+};
 
 const keyboardToggleOmni = async (e) => {
   if (e.key === '/' && e.ctrlKey) {
     omnibox.value.visible = !omnibox.value.visible;
     if (omnibox.value.visible && searchInputRef.value) {
-      await nextTick();
       searchInputRef.value.focus();
     }
+  } else {
+    arrowNav(e);
   }
 };
+
+watch(
+  omnibox,
+  () => {
+    searchTerm.value = '';
+  },
+  { deep: true }
+);
 
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', keyboardToggleOmni);
@@ -32,14 +85,25 @@ onMounted(() => {
         <input
           type="text"
           ref="searchInputRef"
+          v-model="searchTerm"
           placeholder="Search all projects ..."
         />
         <span class="icon" v-html="getIcon('search')"></span>
       </div>
       <div class="results">
-        <div class="title">Current Project - Sales CRM</div>
-        <SidebarItems :items="projectScreens" />
-        <div class="gutter"></div>
+        <div
+          class="section"
+          v-if="projectScreensFiltered.length && searchTerm.length"
+        >
+          <div class="title">Sales CRM</div>
+          <SidebarItems :items="projectScreensFiltered" />
+          <div class="gutter"></div>
+        </div>
+        <div class="section" v-if="allProjects.length">
+          <div class="title">Projects</div>
+          <SidebarItems :items="allProjects" />
+          <div class="gutter"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -61,7 +125,7 @@ onMounted(() => {
     position: relative;
     margin: auto;
     max-width: 680px;
-    max-height: 380px;
+    max-height: 420px;
     background: #fff;
     height: calc(100% - 60px);
     width: calc(100% - 60px);
@@ -104,10 +168,14 @@ onMounted(() => {
 
     .results {
       flex-grow: 1;
+      border-radius: 0 0 16px 16px;
       overflow: auto;
 
       .title {
-        margin: 0 12px 12px;
+        position: sticky;
+        top: 0;
+        background: #fff;
+        padding: 4px 24px 10px;
         font-size: 0.9rem;
         color: #666;
       }

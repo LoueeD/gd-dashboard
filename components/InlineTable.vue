@@ -14,22 +14,77 @@ defineProps({
 <template>
   <div class="inline-table">
     <div class="row row--header">
+      <div class="select"></div>
       <div class="cell" v-for="cell in header">
         {{ cell.value }}
       </div>
+      <div class="options"></div>
     </div>
     <div class="row" v-for="row in rows">
+      <div class="select"><span /></div>
       <div class="cell" v-for="cell in row.cells">
         {{ cell.value }}
       </div>
+      <div class="options"><span /><span /><span /></div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .inline-table {
+  flex-grow: 1;
+  overflow: auto;
   .row {
     display: flex;
+
+    &--header {
+      font-size: 0.9rem;
+      color: rgba(#111, 0.6);
+    }
+
+    .select,
+    .options {
+      width: 40px;
+      flex-shrink: 0;
+      border: solid rgba(#111, 0.1);
+      border-width: 0 1px 1px 0;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+    }
+
+    .select {
+      span {
+        width: 20px;
+        height: 20px;
+        border: 1px solid rgba(#111, 0.1);
+        border-radius: 4px;
+        cursor: pointer;
+
+        &:hover {
+          border: 1px solid rgba(#111, 0.2);
+          box-shadow: 0 1px 2px rgba(#111, 0.2);
+        }
+      }
+    }
+
+    .options {
+      width: 26px;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 4px;
+
+      span {
+        width: 4px;
+        height: 4px;
+        background: rgba(#111, 0.3);
+        border-radius: 4px;
+      }
+
+      &:hover {
+        background: rgba(#111, 0.05);
+      }
+    }
 
     .cell {
       min-width: 220px;
