@@ -25,13 +25,13 @@ const { getIcon } = useIcon();
 <template>
   <ul>
     <li :data-level="level" v-for="link in items">
-      <a :class="{ active: link.active }" :href="link.route">
+      <RouterLink :class="{ active: link.active }" :to="link.route">
         <span class="icon" v-if="link.icon" v-html="getIcon(link.icon)"></span>
         <span class="title">{{ link.title }}</span>
         <div v-if="!link.hideOptions" class="options">
           <span /><span /><span />
         </div>
-      </a>
+      </RouterLink>
       <SidebarItems
         v-if="link.nested.length"
         :items="link.nested"

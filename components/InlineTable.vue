@@ -23,7 +23,15 @@ defineProps({
     <div class="row" v-for="row in rows">
       <div class="select"><span /></div>
       <div class="cell" v-for="(cell, index) in row.cells" :data-index="index">
-        {{ cell.value }}
+        <img
+          class="icon"
+          v-if="cell.type === 'icon'"
+          :src="cell.value"
+          alt=""
+        />
+        <template v-else>
+          {{ cell.value }}
+        </template>
       </div>
       <div class="options"><span /><span /><span /></div>
     </div>
@@ -103,24 +111,36 @@ defineProps({
       border-width: 0 1px 1px 0;
       padding: 10px;
 
+      .icon {
+        margin: -10px 0;
+        width: 30px;
+        height: 30px;
+        border-radius: 100%;
+        box-shadow: 0 0 0 1px rgba(#111, 0.1);
+      }
+
       &[data-index='0'] {
-        min-width: 70px;
+        min-width: 50px;
       }
 
       &[data-index='1'] {
-        min-width: 130px;
+        min-width: 70px;
       }
 
       &[data-index='2'] {
-        min-width: 160px;
+        min-width: 130px;
       }
 
       &[data-index='3'] {
-        min-width: 280px;
+        min-width: 160px;
       }
 
       &[data-index='4'] {
         min-width: 280px;
+      }
+
+      &[data-index='5'] {
+        min-width: 320px;
       }
     }
   }

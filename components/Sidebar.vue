@@ -94,6 +94,7 @@ onMounted(() => {
 .sidebar {
   flex-shrink: 0;
   max-width: 290px;
+  background: darken(#fff, 0%);
   transition: 350ms ease-in-out;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   flex-direction: column;
@@ -258,7 +259,8 @@ onMounted(() => {
         opacity: 1;
       }
 
-      &:hover {
+      &:hover,
+      &.active {
         background: rgba(#111, 0.05);
       }
     }

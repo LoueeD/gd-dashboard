@@ -7,6 +7,7 @@ const { records } = useRecords();
 
 const table = ref({
   header: [
+    { value: 'Icon' },
     { value: 'ID' },
     { value: 'First Name' },
     { value: 'Last Name' },
@@ -17,6 +18,7 @@ const table = ref({
     return {
       rowId: i,
       cells: [
+        { value: 'https://picsum.photos/100?' + i, type: 'icon' },
         { value: item.ID },
         { value: item.firstName },
         { value: item.lastName },
