@@ -47,7 +47,10 @@ export const useProject = () => {
     { name: 'Expense Tracking' },
   ]);
 
-  const sidebar = useState('sidebar', () => ({ collapsed: false }));
+  const sidebar = useState('sidebar', () => ({
+    collapsed: false,
+    width: null,
+  }));
 
   return {
     sidebar,

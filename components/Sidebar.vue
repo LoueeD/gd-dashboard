@@ -1,7 +1,6 @@
 <script setup lang="ts">
 const { projectScreens, sidebar } = useProject();
 const sidebarRef = ref(null);
-const sidebarWidth = ref(null);
 const { omnibox } = useOmni();
 const { getIcon } = useIcon();
 
@@ -44,7 +43,7 @@ const links = ref([
 ]);
 
 onMounted(() => {
-  sidebarWidth.value = sidebarRef.value?.clientWidth;
+  sidebar.value.width = sidebarRef.value?.clientWidth;
 });
 </script>
 
@@ -54,16 +53,16 @@ onMounted(() => {
       <img src="https://gridfox.com/assets/images/gridfox-icon.svg" />
     </div>
     <div class="screens">
-      <a v-for="link in projectScreens" :href="link.route">
+      <RouterLink v-for="link in projectScreens" :to="link.route">
         <span class="icon" v-if="link.icon" v-html="getIcon(link.icon)"></span>
         <div class="label">{{ link.title }}</div>
-      </a>
+      </RouterLink>
     </div>
   </div>
   <div
     class="sidebar"
     ref="sidebarRef"
-    :style="{ '--width': sidebarWidth }"
+    :style="{ '--width': sidebar.width }"
     :class="{ collapsed: sidebar.collapsed }"
   >
     <div class="back">
