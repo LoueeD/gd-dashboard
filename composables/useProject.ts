@@ -9,8 +9,8 @@ export const useProject = () => {
       nested: [],
       active: true,
     },
-    { route: '/', icon: 'briefcase', title: 'Companies', nested: [] },
-    { route: '/contracts', icon: 'users', title: 'Contacts', nested: [] },
+    { route: '/companies', icon: 'briefcase', title: 'Companies', nested: [] },
+    { route: '/', icon: 'users', title: 'Contacts', nested: [] },
     {
       route: '/deals',
       icon: 'book',
