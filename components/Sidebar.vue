@@ -191,7 +191,7 @@ onMounted(() => {
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   transition: 350ms ease-in-out;
   background: #fff;
-  z-index: 100;
+  z-index: 101;
 
   &:not(.collapsed) {
     margin-left: -60px;
