@@ -113,6 +113,7 @@ onMounted(() => {
 .omni {
   position: fixed;
   inset: 0;
+  z-index: 100;
   display: flex;
 
   .backdrop {
