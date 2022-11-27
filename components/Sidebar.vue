@@ -18,6 +18,7 @@ onMounted(() => {
     <div class="screens">
       <a v-for="link in projectScreens" :href="link.route">
         <span class="icon" v-if="link.icon" v-html="getIcon(link.icon)"></span>
+        <div class="label">{{ link.title }}</div>
       </a>
     </div>
   </div>
@@ -135,6 +136,7 @@ onMounted(() => {
     display: flex;
 
     a {
+      position: relative;
       color: #333;
       border-radius: 100%;
       text-decoration: none;
@@ -153,6 +155,24 @@ onMounted(() => {
         svg {
           color: #444;
         }
+      }
+
+      .label {
+        position: absolute;
+        left: 100%;
+        font-size: 0.8rem;
+        border-radius: 6px;
+        white-space: nowrap;
+        padding: 5px 8px;
+        transition: 150ms ease-in-out;
+        background: linear-gradient(36deg, #0038b6, #003c7e);
+        color: rgba(#fff, 1);
+        pointer-events: none;
+        opacity: 0;
+      }
+      &:hover .label {
+        left: 105%;
+        opacity: 1;
       }
 
       &:hover {
