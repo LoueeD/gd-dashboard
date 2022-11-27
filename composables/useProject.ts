@@ -3,23 +3,43 @@ import { ProjectScreen } from '~~/models/ProjectScreen';
 export const useProject = () => {
   const projectScreens = useState('projectScreens', (): ProjectScreen[] => [
     {
-      route: '/',
+      route: '/board',
       icon: 'trello',
       title: 'Deals Board',
       nested: [],
       active: true,
     },
     { route: '/', icon: 'briefcase', title: 'Companies', nested: [] },
-    { route: '/', icon: 'users', title: 'Contacts', nested: [] },
+    { route: '/contracts', icon: 'users', title: 'Contacts', nested: [] },
     {
-      route: '/',
+      route: '/deals',
       icon: 'book',
       title: 'Deals',
       nested: [
-        { route: '/', icon: 'search', title: 'Qualifying', nested: [] },
-        { route: '/', icon: 'search', title: 'Proposal Required', nested: [] },
-        { route: '/', icon: 'search', title: 'Under Review', nested: [] },
-        { route: '/', icon: 'search', title: 'Awaiting Start', nested: [] },
+        {
+          route: '/deals/qualifying',
+          icon: 'search',
+          title: 'Qualifying',
+          nested: [],
+        },
+        {
+          route: '/deals/proposal-required',
+          icon: 'search',
+          title: 'Proposal Required',
+          nested: [],
+        },
+        {
+          route: '/deals/under-review',
+          icon: 'search',
+          title: 'Under Review',
+          nested: [],
+        },
+        {
+          route: '/deals/awaiting-start',
+          icon: 'search',
+          title: 'Awaiting Start',
+          nested: [],
+        },
       ],
     },
     {

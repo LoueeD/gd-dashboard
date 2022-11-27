@@ -6,35 +6,35 @@ const { getIcon } = useIcon();
 
 const links = ref([
   {
-    route: '/',
+    route: '/editer',
     title: 'Edit This Screen',
     icon: 'edit',
     hideOptions: true,
     nested: [],
   },
   {
-    route: '/',
+    route: '/settings',
     title: 'Project Settings',
     icon: 'settings',
     hideOptions: true,
     nested: [],
   },
   {
-    route: '/',
+    route: '/new',
     title: 'New Screen',
     icon: 'plus-square',
     hideOptions: true,
     nested: [],
   },
   {
-    route: '/',
+    route: '/templates',
     title: 'Browse Templates',
     icon: 'package',
     hideOptions: true,
     nested: [],
   },
   {
-    route: '/',
+    route: '/import',
     title: 'Import Data',
     icon: 'upload',
     hideOptions: true,
@@ -259,7 +259,7 @@ onMounted(() => {
       }
 
       &:hover,
-      &.active {
+      &.router-link-exact-active {
         background: rgba(#111, 0.05);
       }
     }

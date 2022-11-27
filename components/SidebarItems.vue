@@ -108,7 +108,7 @@ ul {
         }
       }
 
-      &.active,
+      &.router-link-exact-active,
       &:hover {
         background: rgba(0, 0, 0, 0.04);
         color: #333;
