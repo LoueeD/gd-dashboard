@@ -3,34 +3,28 @@ import feather from 'feather-icons';
 const { projectScreens, sidebar } = useProject();
 const { getIcon } = useIcon();
 const { omnibox } = useOmni();
+const { records } = useRecords();
 
 const table = ref({
   header: [
+    { value: 'ID' },
     { value: 'First Name' },
     { value: 'Last Name' },
-    { value: 'Sector' },
-    { value: 'Company' },
+    { value: 'Email' },
+    { value: 'Job Title' },
   ],
-  rows: [
-    {
-      rowId: '1',
+  rows: records.value.map((item, i) => {
+    return {
+      rowId: i,
       cells: [
-        { value: 'Louis' },
-        { value: 'Dickinson' },
-        { value: 'Software' },
-        { value: 'FYHGT' },
+        { value: item.ID },
+        { value: item.firstName },
+        { value: item.lastName },
+        { value: item.email },
+        { value: item.jobTitle },
       ],
-    },
-    {
-      rowId: '2',
-      cells: [
-        { value: 'Louis' },
-        { value: 'Dickinson' },
-        { value: 'Software' },
-        { value: 'JYONJ' },
-      ],
-    },
-  ],
+    };
+  }),
 });
 </script>
 
@@ -61,6 +55,7 @@ main {
   nav {
     height: 60px;
     padding: 0 16px;
+    flex-shrink: 0;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     align-items: center;
     display: flex;

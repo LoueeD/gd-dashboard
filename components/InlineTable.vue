@@ -15,14 +15,14 @@ defineProps({
   <div class="inline-table">
     <div class="row row--header">
       <div class="select"></div>
-      <div class="cell" v-for="cell in header">
+      <div class="cell" v-for="(cell, index) in header" :data-index="index">
         {{ cell.value }}
       </div>
       <div class="options"></div>
     </div>
     <div class="row" v-for="row in rows">
       <div class="select"><span /></div>
-      <div class="cell" v-for="cell in row.cells">
+      <div class="cell" v-for="(cell, index) in row.cells" :data-index="index">
         {{ cell.value }}
       </div>
       <div class="options"><span /><span /><span /></div>
@@ -35,11 +35,21 @@ defineProps({
   flex-grow: 1;
   overflow: auto;
   .row {
+    justify-content: flex-start;
     display: flex;
 
     &--header {
+      position: sticky;
+      top: 0;
       font-size: 0.9rem;
       color: rgba(#111, 0.6);
+      z-index: 2;
+
+      .cell,
+      .select,
+      .options {
+        background: #fff;
+      }
     }
 
     .select,
@@ -91,6 +101,26 @@ defineProps({
       border: solid rgba(#111, 0.1);
       border-width: 0 1px 1px 0;
       padding: 10px;
+
+      &[data-index='0'] {
+        min-width: 70px;
+      }
+
+      &[data-index='1'] {
+        min-width: 130px;
+      }
+
+      &[data-index='2'] {
+        min-width: 160px;
+      }
+
+      &[data-index='3'] {
+        min-width: 280px;
+      }
+
+      &[data-index='4'] {
+        min-width: 280px;
+      }
     }
   }
 }

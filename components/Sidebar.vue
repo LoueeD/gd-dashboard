@@ -5,6 +5,44 @@ const sidebarWidth = ref(null);
 const { omnibox } = useOmni();
 const { getIcon } = useIcon();
 
+const links = ref([
+  {
+    route: '/',
+    title: 'Edit This Screen',
+    icon: 'edit',
+    hideOptions: true,
+    nested: [],
+  },
+  {
+    route: '/',
+    title: 'Project Settings',
+    icon: 'settings',
+    hideOptions: true,
+    nested: [],
+  },
+  {
+    route: '/',
+    title: 'New Screen',
+    icon: 'plus',
+    hideOptions: true,
+    nested: [],
+  },
+  {
+    route: '/',
+    title: 'Browse Templates',
+    icon: 'triangle',
+    hideOptions: true,
+    nested: [],
+  },
+  {
+    route: '/',
+    title: 'Import Data',
+    icon: 'upload',
+    hideOptions: true,
+    nested: [],
+  },
+]);
+
 onMounted(() => {
   sidebarWidth.value = sidebarRef.value?.clientWidth;
 });
@@ -45,6 +83,10 @@ onMounted(() => {
     <div class="sidebar__screens">
       <SidebarItems :items="projectScreens" :level="1" />
     </div>
+    <div class="sidebar__links">
+      <div class="divider"></div>
+      <SidebarItems :items="links" :level="1" />
+    </div>
   </div>
 </template>
 
@@ -55,6 +97,7 @@ onMounted(() => {
   transition: 350ms ease-in-out;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   flex-direction: column;
+  overflow: auto;
   display: flex;
 
   &.collapsed {
@@ -68,6 +111,7 @@ onMounted(() => {
     font-size: 0.9rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     flex-shrink: 0;
+    color: lighten(#333, 30%);
     align-items: center;
     display: flex;
     gap: 10px;
@@ -78,15 +122,16 @@ onMounted(() => {
   }
 
   .title {
-    height: 38px;
-    padding: 0 16px;
+    height: 34px;
+    padding: 0 12px;
     font-size: 0.9rem;
     font-weight: 600;
     flex-shrink: 0;
+    color: lighten(#222, 10%);
     margin: 12px 12px 8px;
     border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 1px 2px rgba(#111, 0.1);
-    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(#111, 0.05);
+    border-radius: 6px;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
@@ -100,6 +145,43 @@ onMounted(() => {
 
   &__screens {
     font-size: 0.9rem;
+  }
+
+  &__links {
+    font-size: 0.9rem;
+
+    .divider {
+      margin: 8px 12px 12px;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    a {
+      color: lighten(#333, 40%);
+      margin: 4px 0;
+      border-radius: 6px;
+      text-decoration: none;
+      align-items: center;
+      cursor: pointer;
+      display: flex;
+
+      .icon {
+        width: 18px;
+        height: 18px;
+        margin-left: 8px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+
+        svg {
+          color: #444;
+        }
+      }
+
+      .link-title {
+        margin-left: 8px;
+        padding: 4px 0;
+      }
+    }
   }
 }
 .sidebar-collapsed {

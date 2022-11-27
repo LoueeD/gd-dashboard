@@ -28,7 +28,9 @@ const { getIcon } = useIcon();
       <a :class="{ active: link.active }" :href="link.route">
         <span class="icon" v-if="link.icon" v-html="getIcon(link.icon)"></span>
         <span class="title">{{ link.title }}</span>
-        <div class="options"><span /><span /><span /></div>
+        <div v-if="!link.hideOptions" class="options">
+          <span /><span /><span />
+        </div>
       </a>
       <SidebarItems
         v-if="link.nested.length"
@@ -51,17 +53,17 @@ ul {
     }
 
     a {
-      color: #333;
+      color: lighten(#333, 40%);
       margin: 4px 12px;
-      border-radius: 8px;
+      border-radius: 6px;
       text-decoration: none;
       align-items: center;
       display: flex;
 
       .icon {
-        width: 20px;
-        height: 20px;
-        margin-left: 12px;
+        width: 18px;
+        height: 18px;
+        margin-left: 8px;
         justify-content: center;
         align-items: center;
         display: flex;
@@ -74,7 +76,7 @@ ul {
       .title {
         flex-grow: 1;
         min-width: 0;
-        margin: 0 12px;
+        margin: 1px 8px 0;
         padding: 8px 0;
       }
 
@@ -93,18 +95,23 @@ ul {
         span {
           width: 4px;
           height: 4px;
-          background: rgba(#111, 0.3);
+          background: rgba(#111, 0.2);
           border-radius: 4px;
         }
 
         &:hover {
           background: rgba(#111, 0.05);
+
+          span {
+            background: rgba(#111, 0.4);
+          }
         }
       }
 
       &.active,
       &:hover {
         background: rgba(0, 0, 0, 0.04);
+        color: #333;
 
         .options {
           opacity: 1;
