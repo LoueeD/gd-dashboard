@@ -3,6 +3,7 @@ const { projectScreens, sidebar } = useProject();
 const sidebarRef = ref(null);
 const { omnibox } = useOmni();
 const { getIcon } = useIcon();
+const projectSettings = ref(false);
 
 const links = ref([
   {
@@ -13,7 +14,9 @@ const links = ref([
     nested: [],
   },
   {
-    route: '/settings',
+    action: () => {
+      projectSettings.value = !projectSettings.value;
+    },
     title: 'Project Settings',
     icon: 'settings',
     hideOptions: true,
@@ -62,7 +65,7 @@ onMounted(() => {
   <div
     class="sidebar"
     ref="sidebarRef"
-    :style="{ '--width': sidebar.width }"
+    :style="{ '--sidebar-width': sidebar.width }"
     :class="{ collapsed: sidebar.collapsed }"
   >
     <div class="back">
@@ -87,6 +90,9 @@ onMounted(() => {
       <div class="divider"></div>
       <SidebarItems :items="links" :level="1" />
     </div>
+    <transition name="project-settings">
+      <ProjectSettings v-if="projectSettings" />
+    </transition>
   </div>
 </template>
 
@@ -103,7 +109,7 @@ onMounted(() => {
   z-index: 100;
 
   &.collapsed {
-    margin-left: calc(calc(var(--width) * -1px) - 2px);
+    margin-left: calc(calc(var(--sidebar-width) * -1px) - 2px);
   }
 
   .back {
@@ -191,6 +197,18 @@ onMounted(() => {
         padding: 4px 0;
       }
     }
+  }
+
+  .project-settings-enter-active,
+  .project-settings-leave-active {
+    transition: 0.35s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    transform-origin: left center;
+  }
+
+  .project-settings-enter-from,
+  .project-settings-leave-to {
+    transform: translate3d(20px, 0, 0);
+    opacity: 0;
   }
 }
 .sidebar-collapsed {

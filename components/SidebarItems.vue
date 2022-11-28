@@ -25,13 +25,18 @@ const { getIcon } = useIcon();
 <template>
   <ul>
     <li :data-level="level" v-for="link in items">
-      <RouterLink :class="{ active: link.active }" :to="link.route">
+      <component
+        :is="link.route ? 'router-link' : 'span'"
+        :class="{ active: link.active }"
+        :to="link.route"
+        @click="link.action"
+      >
         <span class="icon" v-if="link.icon" v-html="getIcon(link.icon)"></span>
         <span class="title">{{ link.title }}</span>
         <div v-if="!link.hideOptions" class="options">
           <span /><span /><span />
         </div>
-      </RouterLink>
+      </component>
       <SidebarItems
         v-if="link.nested.length"
         :items="link.nested"
@@ -52,12 +57,14 @@ ul {
       padding-left: 12px;
     }
 
-    a {
-      color: lighten(#333, 40%);
+    > a,
+    > span {
+      color: lighten(#333, 15%);
       margin: 4px 12px;
       border-radius: 6px;
       text-decoration: none;
       align-items: center;
+      cursor: pointer;
       display: flex;
 
       .icon {
@@ -110,7 +117,7 @@ ul {
 
       &.router-link-exact-active,
       &:hover {
-        background: rgba(0, 0, 0, 0.04);
+        background: rgba(0, 0, 0, 0.08);
         color: #333;
 
         .options {
