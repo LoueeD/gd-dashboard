@@ -69,6 +69,7 @@ onMounted(() => {
       <img src="https://gridfox.com/assets/images/gridfox-icon.svg" />
       View All Projects
     </div>
+    <!-- <div class="logo"></div> -->
     <div
       class="title"
       :class="{
@@ -107,10 +108,8 @@ onMounted(() => {
 
   .back {
     cursor: pointer;
-    height: 60px;
-    padding: 0 12px;
+    padding: 18px;
     font-size: 0.9rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     flex-shrink: 0;
     color: lighten(#333, 30%);
     justify-content: center;
@@ -123,6 +122,14 @@ onMounted(() => {
     }
   }
 
+  .logo {
+    margin: 10px 12px 0;
+    height: 80px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 2px rgba(#111, 0.05);
+    border-radius: 12px;
+  }
+
   .title {
     height: 34px;
     padding: 0 12px;
@@ -130,7 +137,7 @@ onMounted(() => {
     font-weight: 600;
     flex-shrink: 0;
     color: lighten(#222, 10%);
-    margin: 12px 12px 8px;
+    margin: 0 12px 8px;
     border: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 1px 2px rgba(#111, 0.05);
     border-radius: 6px;
@@ -202,11 +209,10 @@ onMounted(() => {
 
   .back {
     cursor: pointer;
-    height: 60px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    flex-shrink: 0;
+    height: 55px;
+    padding: 6px 0 0;
     justify-content: center;
-    align-items: center;
+    flex-shrink: 0;
     display: flex;
 
     img {
@@ -218,6 +224,7 @@ onMounted(() => {
     padding: 8px;
     flex-direction: column;
     display: flex;
+    gap: 6px;
 
     a {
       position: relative;

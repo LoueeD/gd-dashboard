@@ -92,7 +92,7 @@ defineProps({
         cursor: pointer;
 
         &:hover {
-          border: 1px solid rgba(#111, 0.2);
+          border: 1px solid rgba(#111, 0.4);
           box-shadow: 0 1px 2px rgba(#111, 0.2);
         }
       }
