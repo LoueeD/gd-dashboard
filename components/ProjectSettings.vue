@@ -2,6 +2,53 @@
 const { projectScreens, sidebar } = useProject();
 const canvas = ref(null);
 const picker = ref(null);
+const pickerPos = reactive({
+  x: 30,
+  y: 30,
+  colour: '',
+  dragging: false,
+  get css() {
+    return {
+      cursor: this.dragging ? 'grabbing' : 'grab',
+      transform: `translate3d(${this.x}px, ${this.y}px, 0)`,
+      background: this.colour,
+    };
+  },
+});
+
+function angle(cx, cy, ex, ey) {
+  var dy = ey - cy;
+  var dx = ex - cx;
+  var theta = Math.atan2(dy, dx); // range (-PI, PI]
+  theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
+  if (theta < 0) theta = 360 + theta; // range [0, 360)
+  return Math.round(theta);
+}
+
+function mousedown(e: MouseEvent) {
+  e.preventDefault();
+  pickerPos.dragging = true;
+  const { width, height } = picker.value.getBoundingClientRect();
+  console.log(e, pickerPos);
+  const { clientX, clientY } = e;
+  let cache = { ...pickerPos };
+  const mousemove = (me: MouseEvent) => {
+    me.preventDefault();
+    const { clientX: mx, clientY: my } = me;
+    pickerPos.x = Math.max(0, Math.min(width, cache.x + (mx - clientX)));
+    pickerPos.y = Math.max(0, Math.min(height, cache.y + (my - clientY)));
+    const ang = angle(pickerPos.x, pickerPos.y, width / 2, height / 2);
+    pickerPos.colour = `hsl(${ang}, 50%, 50%)`;
+    sidebar.value.background = pickerPos.colour;
+  };
+  const mouseup = () => {
+    pickerPos.dragging = false;
+    window.removeEventListener('mousemove', mousemove);
+    window.removeEventListener('mouseup', mouseup);
+  };
+  window.addEventListener('mousemove', mousemove);
+  window.addEventListener('mouseup', mouseup);
+}
 
 function setupCanvas(canvas) {
   const dpr = window.devicePixelRatio || 1;
@@ -16,15 +63,18 @@ function setupCanvas(canvas) {
 }
 
 onMounted(() => {
-  // canvas.value.width = picker.value.clientWidth;
-  // canvas.value.height = picker.value.clientHeight;
-  // const ctx = setupCanvas(canvas.value);
-  // if (ctx) {
-  //   for (let i = 0; i < 200; i = i + 10) {
-  //     ctx.fillRect(i, 10, 1, 1);
-  //   }
-  //   ctx.fill();
-  // }
+  canvas.value.width = picker.value.clientWidth;
+  canvas.value.height = picker.value.clientHeight;
+  const ctx = setupCanvas(canvas.value);
+  if (ctx) {
+    ctx.fillStyle = '#cdcdcd';
+    for (let i = 0; i < 200; i = i + 5) {
+      for (let z = 0; z < 200; z = z + 5) {
+        ctx.fillRect(i, z, 1, 1);
+      }
+    }
+    ctx.fill();
+  }
 });
 </script>
 
@@ -33,6 +83,7 @@ onMounted(() => {
     <div class="colour">
       <div class="colour__picker" ref="picker">
         <canvas ref="canvas"></canvas>
+        <div class="dot" @mousedown="mousedown" :style="pickerPos.css"></div>
       </div>
     </div>
   </div>
@@ -60,9 +111,25 @@ onMounted(() => {
 
   .colour {
     &__picker {
+      position: relative;
       aspect-ratio: 1/1;
-      border: 1px solid rgba(#222, 0.1);
+      border: 1px solid rgba(#222, 0.05);
       border-radius: 8px;
+
+      canvas {
+        display: block;
+      }
+
+      .dot {
+        position: absolute;
+        top: -15px;
+        left: -15px;
+        width: 30px;
+        height: 30px;
+        background: #fff;
+        border-radius: 100%;
+        border: 4px solid lighten(#666, 48%);
+      }
     }
   }
 }

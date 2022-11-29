@@ -59,7 +59,7 @@ ul {
 
     > a,
     > span {
-      color: lighten(#333, 15%);
+      color: rgba(var(--color), 0.6);
       margin: 4px 12px;
       border-radius: 6px;
       text-decoration: none;
@@ -74,10 +74,6 @@ ul {
         justify-content: center;
         align-items: center;
         display: flex;
-
-        svg {
-          color: #444;
-        }
       }
 
       .title {
@@ -102,23 +98,23 @@ ul {
         span {
           width: 4px;
           height: 4px;
-          background: rgba(#111, 0.2);
+          background: rgba(var(--color), 0.2);
           border-radius: 4px;
         }
 
         &:hover {
-          background: rgba(#111, 0.05);
+          background: rgba(var(--color), 0.05);
 
           span {
-            background: rgba(#111, 0.4);
+            background: rgba(var(--color), 0.4);
           }
         }
       }
 
       &.router-link-exact-active,
       &:hover {
-        background: rgba(0, 0, 0, 0.08);
-        color: #333;
+        background: rgba(var(--color), 0.08);
+        color: rgba(var(--color), 1);
 
         .options {
           opacity: 1;

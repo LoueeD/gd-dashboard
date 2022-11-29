@@ -70,6 +70,7 @@ export const useProject = () => {
   const sidebar = useState('sidebar', () => ({
     collapsed: false,
     width: null,
+    background: '',
   }));
 
   return {

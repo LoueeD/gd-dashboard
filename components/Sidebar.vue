@@ -51,7 +51,14 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="sidebar-collapsed" :class="{ collapsed: sidebar.collapsed }">
+  <div
+    class="sidebar-collapsed"
+    :class="{ collapsed: sidebar.collapsed }"
+    :style="{
+      background: sidebar.background,
+      '--color': sidebar.background ? '255, 255, 255' : null,
+    }"
+  >
     <div class="back">
       <img src="https://gridfox.com/assets/images/gridfox-icon.svg" />
     </div>
@@ -65,12 +72,16 @@ onMounted(() => {
   <div
     class="sidebar"
     ref="sidebarRef"
-    :style="{ '--sidebar-width': sidebar.width }"
+    :style="{
+      '--sidebar-width': sidebar.width,
+      background: sidebar.background,
+      '--color': sidebar.background ? '255, 255, 255' : null,
+    }"
     :class="{ collapsed: sidebar.collapsed }"
   >
     <div class="back">
       <img src="https://gridfox.com/assets/images/gridfox-icon.svg" />
-      View All Projects
+      All Projects
     </div>
     <!-- <div class="logo"></div> -->
     <div
@@ -108,6 +119,8 @@ onMounted(() => {
   display: flex;
   z-index: 100;
 
+  --color: 0, 0, 0;
+
   &.collapsed {
     margin-left: calc(calc(var(--sidebar-width) * -1px) - 2px);
   }
@@ -117,14 +130,14 @@ onMounted(() => {
     padding: 18px;
     font-size: 0.9rem;
     flex-shrink: 0;
-    color: lighten(#333, 30%);
-    justify-content: center;
+    color: rgba(var(--color), 0.7);
     align-items: center;
     display: flex;
     gap: 16px;
 
     img {
       width: 24px;
+      margin-left: -4px;
     }
   }
 
@@ -142,19 +155,22 @@ onMounted(() => {
     font-size: 0.9rem;
     font-weight: 600;
     flex-shrink: 0;
-    color: lighten(#222, 10%);
+    color: rgba(var(--color), 0.8);
     margin: 0 12px 8px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 1px 2px rgba(#111, 0.05);
+    border: 1px solid rgba(var(--color), 0.08);
     border-radius: 6px;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
     display: flex;
 
+    &.arrow--after-down::after,
+    &.arrow--after-up::after {
+      border-color: rgba(var(--color), 0.5);
+    }
+
     &:hover {
-      border: 1px solid rgba(0, 0, 0, 0.15);
-      box-shadow: 0 1px 3px rgba(#111, 0.15);
+      border: 1px solid rgba(var(--color), 0.2);
     }
   }
 
@@ -167,11 +183,11 @@ onMounted(() => {
 
     .divider {
       margin: 8px 12px 12px;
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      border-top: 1px solid rgba(var(--color), 0.1);
     }
 
     a {
-      color: lighten(#333, 40%);
+      color: rgba(var(--color), 0.7);
       margin: 4px 0;
       border-radius: 6px;
       text-decoration: none;
@@ -188,7 +204,7 @@ onMounted(() => {
         display: flex;
 
         svg {
-          color: #444;
+          color: rgba(var(--color), 1);
         }
       }
 
@@ -214,7 +230,7 @@ onMounted(() => {
 .sidebar-collapsed {
   width: 60px;
   flex-shrink: 0;
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgba(var(--color), 0.1);
   transition: 350ms ease-in-out;
   background: #fff;
   z-index: 101;
@@ -246,7 +262,7 @@ onMounted(() => {
 
     a {
       position: relative;
-      color: #333;
+      color: rgba(var(--color), 0.8);
       border-radius: 100%;
       text-decoration: none;
       aspect-ratio: 1/1;
@@ -262,7 +278,7 @@ onMounted(() => {
         display: flex;
 
         svg {
-          color: #444;
+          color: rgba(var(--color), 1);
         }
       }
 
@@ -286,7 +302,7 @@ onMounted(() => {
 
       &:hover,
       &.router-link-exact-active {
-        background: rgba(#111, 0.05);
+        background: rgba(var(--color), 0.05);
       }
     }
   }
