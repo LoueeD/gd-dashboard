@@ -91,7 +91,7 @@ onMounted(() => {
       <GridfoxLogo v-else />
       All Projects
     </div>
-    <div class="logo-divider" v-if="sidebar.logo"></div>
+    <!-- <div class="logo-divider" v-if="sidebar.logo"></div> -->
     <div class="logo" v-if="sidebar.logo">
       <img
         :src="sidebar.logo"
