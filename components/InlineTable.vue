@@ -54,7 +54,6 @@ defineProps({
   }
   .row {
     font-size: 0.9rem;
-    padding-right: 60px;
     justify-content: flex-start;
     display: flex;
 

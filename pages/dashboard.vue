@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { DoughnutChart } from 'vue-chart-3';
 const dashboardRef = ref(null);
 const canvasRef = ref(null);
 const ctx = ref(null);
+const router = useRouter();
 const mouse = reactive({
   x: 0,
   y: 0,
@@ -83,6 +85,39 @@ function mousedown(e: MouseEvent, block) {
   window.addEventListener('mouseup', mouseup);
 }
 
+const options = ref({
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      position: 'top',
+    },
+    title: {
+      display: true,
+      text: 'Chart.js Doughnut Chart',
+    },
+  },
+});
+
+const DoughnutChartData = {
+  labels: ['Paris', 'Nîmes', 'Toulon', 'Perpignan', 'Autre'],
+  datasets: [
+    {
+      data: [30, 40, 60, 70, 5],
+      backgroundColor: ['#77CEFF', '#0079AF', '#123E6B', '#97B0C4', '#A5C8ED'],
+    },
+  ],
+};
+
+function routeToChart() {
+  router.push({
+    name: 'dashboard-chart-chartName',
+    params: {
+      chartName: 'my-first-chart',
+    },
+  });
+}
+
 onMounted(() => {
   canvasRef.value.width = dashboardRef.value.clientWidth + 300;
   canvasRef.value.height = dashboardRef.value.clientHeight + 1000;
@@ -113,10 +148,14 @@ onMounted(() => {
           v-for="(b, index) in blocks"
           :style="cssBlocks[index]"
           @mousedown.stop="mousedown($event, b)"
-        ></div>
+          @click="routeToChart(b)"
+        >
+          <DoughnutChart :chartData="DoughnutChartData" :options="options" />
+        </div>
       </div>
       <div class="block" :style="mouse.css"></div>
     </div>
+    <router-view :chartData="DoughnutChartData" :chartOptions="options" />
   </ProjectWrapper>
 </template>
 
@@ -139,6 +178,7 @@ onMounted(() => {
     left: -1px;
     background: #fff;
     box-shadow: inset 0 0 0 1px rgba(#111, 0.2), 5px 5px 0 1px rgba(#111, 0.08);
+    overflow: clip;
   }
 }
 </style>

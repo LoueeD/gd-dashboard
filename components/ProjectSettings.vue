@@ -136,7 +136,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="project-settings" ref="projectSettingsEl">
+  <div
+    class="project-settings"
+    ref="projectSettingsEl"
+    @mouseleave="projectSettings.visible = !projectSettings.visible"
+  >
     <!-- <div
       class="back arrow--after arrow-white"
       @click="projectSettings.visible = !projectSettings.visible"
