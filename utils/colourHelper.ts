@@ -38,9 +38,19 @@ export const colourHelper = () => {
     return Math.round(theta);
   }
 
+  const sidebarColours = [
+    { h: 360, s: 50, l: 100 },
+    { h: 238, s: 50, l: 28 },
+    { h: 200, s: 50, l: 50 },
+    { h: 260, s: 50, l: 50 },
+    { h: 500, s: 50, l: 32 },
+    { h: 367, s: 50, l: 50 },
+  ];
+
   return {
     isDarkText,
     hslToHex,
     getAngle,
+    sidebarColours,
   };
 };

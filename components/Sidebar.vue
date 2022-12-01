@@ -93,7 +93,11 @@ onMounted(() => {
     </div>
     <div class="logo-divider" v-if="sidebar.logo"></div>
     <div class="logo" v-if="sidebar.logo">
-      <img :src="sidebar.logo" alt="Project Logo" />
+      <img
+        :src="sidebar.logo"
+        alt="Project Logo"
+        @click="projectSettings.visible = !projectSettings.visible"
+      />
     </div>
     <div
       class="title"
@@ -159,8 +163,8 @@ onMounted(() => {
   }
 
   .logo {
-    margin: 0 12px 0;
     border-radius: 4px;
+    margin: 0 12px 12px;
     // border: 1px solid rgba(var(--color), 0.1);
     // box-shadow: 0 1px 2px rgba(var(--color), 0.05);
     max-width: calc(calc(var(--sidebar-width) * 1px) - 24px);
@@ -170,7 +174,7 @@ onMounted(() => {
     display: flex;
 
     img {
-      max-width: 100%;
+      width: 100%;
       display: block;
     }
   }
@@ -182,7 +186,7 @@ onMounted(() => {
     font-weight: 600;
     flex-shrink: 0;
     color: rgba(var(--color), 0.8);
-    margin: 12px 12px 8px;
+    margin: 0 12px 8px;
     border: 1px solid rgba(var(--color), 0.08);
     border-radius: 6px;
     justify-content: space-between;
