@@ -12,6 +12,15 @@
             :style="{ 'max-height': 'unset' }"
           />
         </div>
+
+        <RouterLink
+          class="close"
+          :to="{ name: 'dashboard' }"
+          v-html="getIcon('x')"
+        />
+      </div>
+      <div class="tools">
+        <SearchHeader />
         <span class="link">View as Search Filter</span>
       </div>
       <div class="data-table">
@@ -30,6 +39,7 @@ defineProps({
   chartOptions: Object,
 });
 
+const { getIcon } = useIcon();
 const { records } = useRecords();
 
 const table = ref({
@@ -84,22 +94,26 @@ const table = ref({
     border-radius: 12px;
     background: #fff;
     flex-direction: column;
+    align-items: flex-start;
     display: flex;
-    overflow: clip;
+    overflow: auto;
 
     .chart {
       position: relative;
-      padding: 0 15px 25px;
-      border-bottom: 1px solid rgba(#111, 0.1);
+      padding: 0 15px 15px;
+      width: 100%;
+      position: sticky;
+      left: 0;
+      // border-bottom: 1px solid rgba(#111, 0.1);
 
       &::before {
         position: absolute;
         left: 0;
         right: 0;
         bottom: 0;
-        height: 20px;
-        background: linear-gradient(rgba(#111, 0), rgba(#111, 0.05));
-        content: '';
+        height: 10px;
+        background: linear-gradient(rgba(#111, 0), rgba(#111, 0.03));
+        // content: '';
       }
 
       .chart-inner {
@@ -107,34 +121,71 @@ const table = ref({
         max-width: 340px;
       }
 
-      .link {
+      .close {
         position: absolute;
         margin: 10px;
+        top: 0;
         right: 0;
-        bottom: 0;
+        width: 28px;
+        height: 28px;
+        padding: 6px;
+        color: #418bd9;
+        border-radius: 8px;
+        background: rgba(#418bd9, 0.1);
+        justify-content: center;
+        align-items: center;
+        display: flex;
+      }
+    }
+
+    .tools {
+      width: 100%;
+      position: sticky;
+      left: 0;
+
+      &:deep(.search-header) {
+        border: 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        display: none;
+      }
+
+      .link {
+        position: absolute;
+        margin: auto;
+        right: 0px;
+        // top: 0;
+        bottom: 10px;
         color: #fff;
         font-size: 0.8rem;
-        font-weight: 600;
-        padding: 8px 16px;
-        background: #418bd9;
-        border-radius: 40px;
+        padding: 0 12px;
+        height: 30px;
+        color: #fff;
+        background: rgba(#418bd9, 1);
+        border-radius: 8px;
+        align-items: center;
         cursor: pointer;
-        display: block;
+        display: flex;
       }
     }
 
     .data-table {
       min-height: 0;
-      display: flex;
+      // padding: 20px 40px;
+
+      // display: flex;
 
       &__inner {
         margin: 0 auto;
         min-height: 0;
-        overflow: auto;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        // border-radius: 6px;
+        // overflow: hidden;
         display: flex;
 
         :deep(.inline-table) {
           margin: auto;
+          // margin-right: -1px;
+          border-radius: 6px;
           overflow: visible;
           flex-grow: 1;
         }
