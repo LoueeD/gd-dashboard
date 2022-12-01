@@ -119,7 +119,7 @@ onMounted(() => {
   .backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(#111, 0.2);
+    background: rgba(#111, 0.6);
   }
 
   &__box {
