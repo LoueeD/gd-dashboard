@@ -79,9 +79,8 @@ const table = ref({
   &__modal {
     position: relative;
     margin: auto;
-    max-width: 1400px;
     height: calc(100vh - 120px);
-    // width: calc(100% - 120px);
+    max-width: calc(100% - 120px);
     border-radius: 12px;
     background: #fff;
     flex-direction: column;
@@ -90,7 +89,7 @@ const table = ref({
 
     .chart {
       position: relative;
-      padding: 15px;
+      padding: 0 15px 25px;
       border-bottom: 1px solid rgba(#111, 0.1);
 
       &::before {
@@ -101,6 +100,11 @@ const table = ref({
         height: 20px;
         background: linear-gradient(rgba(#111, 0), rgba(#111, 0.05));
         content: '';
+      }
+
+      .chart-inner {
+        margin: auto;
+        max-width: 340px;
       }
 
       .link {
