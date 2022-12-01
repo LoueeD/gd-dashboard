@@ -2,6 +2,7 @@
 const { projectScreens, projectSettings, sidebar, sidebarColour } =
   useProject();
 const { getAngle, hslToHex, isDarkText, sidebarColours } = colourHelper();
+const projectSettingsEl = ref(null);
 const { getIcon } = useIcon();
 const canvas = ref(null);
 const picker = ref(null);
@@ -39,8 +40,7 @@ function mousedownColour(e: MouseEvent) {
     const { clientX: mx, clientY: my } = me;
     pickerConfig.x = Math.max(0, Math.min(width, cache.x + (mx - clientX)));
     pickerConfig.y = Math.max(0, Math.min(height, cache.y + (my - clientY)));
-    const ang =
-      180 + getAngle(pickerConfig.x, pickerConfig.y, width / 2, height / 2);
+    const ang = getAngle(pickerConfig.x, pickerConfig.y, width / 2, height / 2);
     sidebar.value.colour.background.h = ang;
     sidebar.value.colour.background.l = parseInt(pickerConfig.slider);
     const hex = hslToHex(sidebar.value.colour.background);
@@ -136,7 +136,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="project-settings">
+  <div class="project-settings" ref="projectSettingsEl">
     <!-- <div
       class="back arrow--after arrow-white"
       @click="projectSettings.visible = !projectSettings.visible"
@@ -235,9 +235,14 @@ onMounted(() => {
         width: 18px;
         height: 24px;
         cursor: pointer;
+        border-radius: 8px;
         justify-content: center;
         align-items: center;
         display: flex;
+
+        &:hover {
+          background: rgba(#fff, 0.1);
+        }
 
         &:last-child {
           transform: rotate(180deg);
@@ -249,7 +254,7 @@ onMounted(() => {
         justify-content: center;
         align-items: center;
         display: flex;
-        gap: 8px;
+        gap: 6px;
 
         span {
           width: 20px;
