@@ -67,15 +67,50 @@ export const useProject = () => {
     { name: 'Expense Tracking' },
   ]);
 
+  const projectSettings = useState('projectSettings', () => ({
+    visible: false,
+  }));
+
   const sidebar = useState('sidebar', () => ({
     collapsed: false,
     width: null,
+    logo: null,
     background: '',
+    textColour: '',
+    colour: {
+      background: {
+        h: 50 as null | number,
+        s: 50 as null | number,
+        l: 100 as null | number,
+      },
+      darkText: true,
+    },
   }));
+
+  const sidebarColour = computed(() => {
+    function css(hsl: {
+      h: null | number;
+      s: null | number;
+      l: null | number;
+    }) {
+      const { h, s, l } = hsl;
+      if (h === null) return undefined;
+      if (s === null) return undefined;
+      if (l === null) return undefined;
+      return `hsl(${h}deg, ${s}%, ${l}%)`;
+    }
+    const { background, darkText } = sidebar.value.colour;
+    return {
+      background: css(background),
+      textColour: darkText ? '0, 0, 0' : '255, 255, 255',
+    };
+  });
 
   return {
     sidebar,
+    sidebarColour,
     projectScreens,
+    projectSettings,
     projects,
   };
 };

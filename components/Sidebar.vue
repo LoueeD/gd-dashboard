@@ -1,9 +1,9 @@
 <script setup lang="ts">
-const { projectScreens, sidebar } = useProject();
+const { projectScreens, projectSettings, sidebar, sidebarColour } =
+  useProject();
 const sidebarRef = ref(null);
 const { omnibox } = useOmni();
 const { getIcon } = useIcon();
-const projectSettings = ref(false);
 
 const links = ref([
   {
@@ -15,7 +15,7 @@ const links = ref([
   },
   {
     action: () => {
-      projectSettings.value = !projectSettings.value;
+      projectSettings.value.visible = !projectSettings.value.visible;
     },
     title: 'Project Settings',
     icon: 'settings',
@@ -55,12 +55,16 @@ onMounted(() => {
     class="sidebar-collapsed"
     :class="{ collapsed: sidebar.collapsed }"
     :style="{
-      background: sidebar.background,
-      '--color': sidebar.background ? '255, 255, 255' : null,
+      background: sidebarColour.background,
+      '--color': sidebarColour.textColour,
     }"
   >
     <div class="back">
-      <img src="https://gridfox.com/assets/images/gridfox-icon.svg" />
+      <img
+        v-if="sidebar.colour.background.l == 100"
+        src="https://gridfox.com/assets/images/gridfox-icon.svg"
+      />
+      <GridfoxLogo v-else />
     </div>
     <div class="screens">
       <RouterLink v-for="link in projectScreens" :to="link.route">
@@ -74,16 +78,23 @@ onMounted(() => {
     ref="sidebarRef"
     :style="{
       '--sidebar-width': sidebar.width,
-      background: sidebar.background,
-      '--color': sidebar.background ? '255, 255, 255' : null,
+      '--color': sidebarColour.textColour,
+      background: sidebarColour.background,
     }"
     :class="{ collapsed: sidebar.collapsed }"
   >
     <div class="back">
-      <img src="https://gridfox.com/assets/images/gridfox-icon.svg" />
+      <img
+        v-if="sidebar.colour.background.l == 100"
+        src="https://gridfox.com/assets/images/gridfox-icon.svg"
+      />
+      <GridfoxLogo v-else />
       All Projects
     </div>
-    <!-- <div class="logo"></div> -->
+    <div class="logo-divider" v-if="sidebar.logo"></div>
+    <div class="logo" v-if="sidebar.logo">
+      <img :src="sidebar.logo" alt="Project Logo" />
+    </div>
     <div
       class="title"
       :class="{
@@ -102,7 +113,7 @@ onMounted(() => {
       <SidebarItems :items="links" :level="1" />
     </div>
     <transition name="project-settings">
-      <ProjectSettings v-if="projectSettings" />
+      <ProjectSettings v-if="projectSettings.visible" />
     </transition>
   </div>
 </template>
@@ -112,7 +123,7 @@ onMounted(() => {
   flex-shrink: 0;
   max-width: 290px;
   background: darken(#fff, 0%);
-  transition: 350ms ease-in-out;
+  transition: 350ms margin-left ease-in-out;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   flex-direction: column;
   overflow: auto;
@@ -135,18 +146,33 @@ onMounted(() => {
     display: flex;
     gap: 16px;
 
-    img {
+    img,
+    svg {
       width: 24px;
       margin-left: -4px;
     }
   }
 
+  .logo-divider {
+    margin: 0 12px 12px;
+    border-top: 1px solid rgba(var(--color), 0.1);
+  }
+
   .logo {
-    margin: 10px 12px 0;
-    height: 80px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 1px 2px rgba(#111, 0.05);
-    border-radius: 12px;
+    margin: 0 12px 0;
+    border-radius: 4px;
+    // border: 1px solid rgba(var(--color), 0.1);
+    // box-shadow: 0 1px 2px rgba(var(--color), 0.05);
+    max-width: calc(calc(var(--sidebar-width) * 1px) - 24px);
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    display: flex;
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
   }
 
   .title {
@@ -156,7 +182,7 @@ onMounted(() => {
     font-weight: 600;
     flex-shrink: 0;
     color: rgba(var(--color), 0.8);
-    margin: 0 12px 8px;
+    margin: 12px 12px 8px;
     border: 1px solid rgba(var(--color), 0.08);
     border-radius: 6px;
     justify-content: space-between;
@@ -249,7 +275,8 @@ onMounted(() => {
     flex-shrink: 0;
     display: flex;
 
-    img {
+    img,
+    svg {
       width: 24px;
     }
   }

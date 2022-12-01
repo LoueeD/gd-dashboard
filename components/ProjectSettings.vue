@@ -1,64 +1,69 @@
 <script setup lang="ts">
-const { projectScreens, sidebar } = useProject();
+const { projectScreens, projectSettings, sidebar, sidebarColour } =
+  useProject();
+const { getAngle, hslToHex, isDarkText } = colourHelper();
 const canvas = ref(null);
 const picker = ref(null);
-const pickerPos = reactive({
+const pickerSlider = ref(null);
+const pickerConfig = reactive({
   x: 30,
   y: 30,
-  colour: '',
-  dragging: false,
-  get css() {
-    return {
-      cursor: this.dragging ? 'grabbing' : 'grab',
-      transform: `translate3d(${this.x}px, ${this.y}px, 0)`,
-      background: this.colour,
-    };
-  },
+  slider: 50,
+  colourDragging: false,
+  sliderDragging: false,
 });
 
-function pickTextColorBasedOnBgColorAdvanced(bgColor, lightColor, darkColor) {
-  var color = (bgColor.charAt(0) === '#') ? bgColor.substring(1, 7) : bgColor;
-  var r = parseInt(color.substring(0, 2), 16); // hexToR
-  var g = parseInt(color.substring(2, 4), 16); // hexToG
-  var b = parseInt(color.substring(4, 6), 16); // hexToB
-  var uicolors = [r / 255, g / 255, b / 255];
-  var c = uicolors.map((col) => {
-    if (col <= 0.03928) {
-      return col / 12.92;
-    }
-    return Math.pow((col + 0.055) / 1.055, 2.4);
-  });
-  var L = (0.2126 * c[0]) + (0.7152 * c[1]) + (0.0722 * c[2]);
-  return (L > 0.179) ? darkColor : lightColor;
-}
-
-function angle(cx, cy, ex, ey) {
-  var dy = ey - cy;
-  var dx = ex - cx;
-  var theta = Math.atan2(dy, dx); // range (-PI, PI]
-  theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
-  if (theta < 0) theta = 360 + theta; // range [0, 360)
-  return Math.round(theta);
-}
-
-function mousedown(e: MouseEvent) {
+function mousedownColour(e: MouseEvent) {
   e.preventDefault();
-  pickerPos.dragging = true;
-  const { width, height } = picker.value.getBoundingClientRect();
-  console.log(e, pickerPos);
+  pickerConfig.colourDragging = true;
+  const { top, left, width, height } = picker.value.getBoundingClientRect();
   const { clientX, clientY } = e;
-  let cache = { ...pickerPos };
+  if (e.target === picker.value) {
+    pickerConfig.x = clientX - left;
+    pickerConfig.y = clientY - top;
+  }
+  let cache = { ...pickerConfig };
   const mousemove = (me: MouseEvent) => {
     me.preventDefault();
     const { clientX: mx, clientY: my } = me;
-    pickerPos.x = Math.max(0, Math.min(width, cache.x + (mx - clientX)));
-    pickerPos.y = Math.max(0, Math.min(height, cache.y + (my - clientY)));
-    const ang = angle(pickerPos.x, pickerPos.y, width / 2, height / 2);
-    pickerPos.colour = `hsl(${ang}, 50%, 50%)`;
-    sidebar.value.background = pickerPos.colour;
+    pickerConfig.x = Math.max(0, Math.min(width, cache.x + (mx - clientX)));
+    pickerConfig.y = Math.max(0, Math.min(height, cache.y + (my - clientY)));
+    const ang =
+      180 + getAngle(pickerConfig.x, pickerConfig.y, width / 2, height / 2);
+    sidebar.value.colour.background.h = ang;
+    sidebar.value.colour.background.l = pickerConfig.slider;
+    const hex = hslToHex(sidebar.value.colour.background);
+    sidebar.value.colour.darkText = isDarkText(hex);
   };
   const mouseup = () => {
-    pickerPos.dragging = false;
+    pickerConfig.colourDragging = false;
+    window.removeEventListener('mousemove', mousemove);
+    window.removeEventListener('mouseup', mouseup);
+  };
+  window.addEventListener('mousemove', mousemove);
+  window.addEventListener('mouseup', mouseup);
+}
+
+function mousedownSlider(e: MouseEvent) {
+  e.preventDefault();
+  pickerConfig.sliderDragging = true;
+  const { top, left, width, height } =
+    pickerSlider.value.getBoundingClientRect();
+  const { clientX, clientY } = e;
+  let cache = pickerConfig.slider;
+  if (e.target === pickerSlider.value) {
+    pickerConfig.slider = clientX - left;
+  }
+  const mousemove = (me: MouseEvent) => {
+    me.preventDefault();
+    const { clientX: mx, clientY: my } = me;
+    pickerConfig.slider = Math.max(0, Math.min(width, cache + (mx - clientX)));
+    sidebar.value.colour.background.l = pickerConfig.slider;
+    const hex = hslToHex(sidebar.value.colour.background);
+    sidebar.value.colour.darkText = isDarkText(hex);
+  };
+  const mouseup = () => {
+    pickerConfig.sliderDragging = false;
     window.removeEventListener('mousemove', mousemove);
     window.removeEventListener('mouseup', mouseup);
   };
@@ -76,6 +81,20 @@ function setupCanvas(canvas) {
   const ctx = canvas.getContext('2d');
   ctx.scale(dpr, dpr);
   return ctx;
+}
+
+function uploadProjectLogo() {
+  const el = document.createElement('input');
+  el.type = 'file';
+  el.accept = 'image/*';
+  el.oninput = (e) => {
+    if (e.target.files) {
+      console.log(e.target.files);
+      const [file] = e.target.files;
+      sidebar.value.logo = URL.createObjectURL(file);
+    }
+  };
+  el.click();
 }
 
 onMounted(() => {
@@ -96,11 +115,42 @@ onMounted(() => {
 
 <template>
   <div class="project-settings">
+    <div
+      class="back arrow--after"
+      @click="projectSettings.visible = !projectSettings.visible"
+    ></div>
     <div class="colour">
-      <div class="colour__picker" ref="picker">
+      <div class="colour__picker" @mousedown="mousedownColour" ref="picker">
         <canvas ref="canvas"></canvas>
-        <div class="dot" @mousedown="mousedown" :style="pickerPos.css"></div>
+        <div
+          class="dot"
+          :style="{
+            background: sidebarColour.background,
+            cursor: pickerConfig.colourDragging ? 'grabbing' : 'grab',
+            transform: `translate3d(${pickerConfig.x}px, ${pickerConfig.y}px, 0)`,
+          }"
+        ></div>
       </div>
+      <div
+        class="colour__saturation"
+        ref="pickerSlider"
+        @mousedown="mousedownSlider"
+      >
+        <span
+          class="lighten"
+          :style="{
+            cursor: pickerConfig.sliderDragging ? 'grabbing' : 'grab',
+            width: `${pickerConfig.slider}%`,
+          }"
+        ></span>
+        <span
+          class="handle"
+          :style="{ background: sidebarColour.background }"
+        ></span>
+      </div>
+    </div>
+    <div class="project-logo-upload">
+      <div class="button" @click="uploadProjectLogo">Upload your Logo</div>
     </div>
   </div>
 </template>
@@ -112,13 +162,18 @@ onMounted(() => {
   top: 12px;
   left: calc(var(--sidebar-width) * 1px);
   width: calc(var(--sidebar-width) * 1px);
-  height: 400px;
-  padding: 12px;
   background: #fff;
   border-radius: 4px;
   box-shadow: 10px 10px 20px rgba(#111, 0.05);
   border: 1px solid rgba(0, 0, 0, 0.1);
-  color: #fff;
+  color: #111;
+
+  .back {
+    padding: 12px;
+    border-bottom: 1px solid rgba(#222, 0.05);
+    cursor: pointer;
+    display: flex;
+  }
 
   .title {
     font-size: 0.9rem;
@@ -126,13 +181,17 @@ onMounted(() => {
   }
 
   .colour {
+    margin: 12px;
+
     &__picker {
       position: relative;
       aspect-ratio: 1/1;
       border: 1px solid rgba(#222, 0.05);
       border-radius: 8px;
+      cursor: pointer;
 
       canvas {
+        pointer-events: none;
         display: block;
       }
 
@@ -145,6 +204,61 @@ onMounted(() => {
         background: #fff;
         border-radius: 100%;
         border: 4px solid lighten(#666, 48%);
+      }
+    }
+
+    &__saturation {
+      height: 24px;
+      margin: 8px -2px;
+      border-radius: 4px;
+      background: rgba(#222, 0.05);
+      cursor: pointer;
+      display: flex;
+
+      .lighten {
+        width: 50%;
+        flex-shrink: 0;
+      }
+
+      .handle {
+        width: 12px;
+        margin: 2px 0;
+        border-radius: 4px;
+        background: rgba(#222, 0.2);
+        transform: translate3d(-50%, 0, 0);
+        cursor: grab;
+      }
+
+      &:hover {
+        background: rgba(#222, 0.07);
+
+        .handle {
+          background: rgba(#222, 0.4);
+        }
+      }
+    }
+  }
+
+  .project-logo-upload {
+    margin: 12px;
+    display: flex;
+
+    .button {
+      padding: 8px;
+      flex-grow: 1;
+      font-size: 0.8rem;
+      text-align: center;
+      border-radius: 8px;
+      border: 1px solid rgba(#222, 0.1);
+      box-shadow: 0 2px 4px rgba(#111, 0.05);
+      color: rgba(#222, 0.7);
+      cursor: pointer;
+
+      &:hover {
+        background: rgba(#222, 0.02);
+        border: 1px solid rgba(#222, 0.2);
+        box-shadow: 0 2px 4px rgba(#111, 0.1);
+        color: rgba(#222, 1);
       }
     }
   }
